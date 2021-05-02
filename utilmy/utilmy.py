@@ -122,8 +122,9 @@ def pd_histogram(dfi, path_save=None, nbin=20.0, q5=0.05, q95=0.95, show=False) 
     q0 = dfi.quantile(q5)
     q1 = dfi.quantile(q95)
     dfi.hist( bins=np.arange( q0, q1,  (  q1 - q0 ) /nbin  ) )
-    os.makedirs(os.path.dirname(path_save), exist_ok=True)
-    if path_save is not None : plt.savefig( path_save );
+    if path_save is not None : 
+        os_makedirs(os.path.dirname(path_save))
+        plt.savefig(path_save)
     if show : plt.show();
     plt.close()
 
@@ -610,6 +611,43 @@ def profiler_stop():
     global profiler
     profiler.stop()
     print(profiler.output_text(unicode=True, color=True))
+
+######################################################################################################
+#contributions by sreekiran_ar:https://github.com/Sreekiranar 
+
+def seaborn_xy_plot(df,x_col,y_col,type='scatter',path_save=None,show=False):
+    """ Seaborn wrapper for easier x,y plotting.
+
+    Args:
+        df (pandas DataFrame): input dataframe
+        x_col (str): X column name
+        y_col (str): Y column name
+        type (str, optional): Type of plot required (scatter/bar/line). Defaults to 'scatter'.
+        path_save (str, optional): path to save the output if required. Defaults to None.
+        show (bool, optional): show the plot. Defaults to False.
+    """
+    
+    import pandas as pd
+    import seaborn as sns
+    import os
+    import matplotlib.pyplot as plt
+    
+    if type=='scatter':
+        sns_plot=sns.scatterplot(data=df, x=x_col, y=y_col)
+    elif type=='line':
+        sns_plot=sns.lineplot(data=df, x=x_col, y=y_col)
+    elif type=='bar':
+        sns_plot=sns.barplot(data=df, x=x_col, y=y_col)
+    
+    if path_save is not None : 
+        os_makedirs(os.path.dirname(path_save))
+        sns_plot.figure.savefig(path_save)
+    if show : 
+        plt.show()
+    plt.close()
+    
+
+
 
 
 ###################################################################################################
